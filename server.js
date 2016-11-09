@@ -5,12 +5,23 @@ var mongojs = require("mongojs");
 var db = mongojs("urldb", ["urls"]);
 
 
-app.get('/new/:long', function (req, res) {
+app.get('/new/http://www.:long.com', function (req, res) {
   //Get the last short url from the db
+  console.log(req.params.long);
 　　var short
   db.urls.find(function (err, docs){
-	
-	var largest = docs.reduce(function(a,b){
+	if (docs.length == 0){
+		short = 0;
+
+	//Insert the short and long urls into the db
+  	db.urls.insert({longurl: req.params.long, short: short});
+
+  	//display the information in JSON format
+  	res.send(JSON.stringify({long: req.params.long, short: short}));
+
+	}
+	else{
+		var largest = docs.reduce(function(a,b){
 	  if(b.short > a.short){
 		return b;		
 	  } else {
@@ -25,6 +36,8 @@ app.get('/new/:long', function (req, res) {
 
   	//display the information in JSON format
   	res.send(JSON.stringify({long: req.params.long, short: short}));
+	}
+	
   });
 });
 
@@ -32,7 +45,7 @@ app.get('/sh/:short', function (req, res) {
   //Get the corresponding long url from the db
   db.urls.findOne({short: parseInt(req.params.short)}, function(err, docs) {
 	console.log(docs);
-        var long = "http://baidu.com";
+        var long = "http://www." + docs.longurl + ".com";
 
   	//Redirect to the long url
 	res.redirect(long);
