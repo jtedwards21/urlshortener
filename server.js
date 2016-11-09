@@ -8,9 +8,18 @@ var db = mongojs("urldb", ["urls"]);
 app.get('/new/:long', function (req, res) {
   //Get the last short url from the db
 　　var short
-  var cursor = db.urls.find(function (err, docs){
-	docs.sort({short: -1});　// This is not actually sorting because it's an array function, not mongo
-　　　　　　　　short = docs[0].short　+ 1;
+  db.urls.find(function (err, docs){
+	
+	var largest = docs.reduce(function(a,b){
+	  if(b.short > a.short){
+		return b;		
+	  } else {
+	  return a;
+	  }
+	});
+	console.log(largest);
+　　　　　　　　short = largest.short　+ 1;
+
 	//Insert the short and long urls into the db
   	db.urls.insert({longurl: req.params.long, short: short});
 
@@ -19,15 +28,16 @@ app.get('/new/:long', function (req, res) {
   });
 });
 
-app.get('/:short', function (req, res) {
-　　console.log('short');
+app.get('/sh/:short', function (req, res) {
   //Get the corresponding long url from the db
-  var cursor = db.urldb.find({short: req.params.short});
-  console.log(cursor);
-  var long = "http://baidu.com";
+  db.urls.findOne({short: parseInt(req.params.short)}, function(err, docs) {
+	console.log(docs);
+        var long = "http://baidu.com";
 
-  //Redirect to the long url
-  res.redirect(long);
+  	//Redirect to the long url
+	res.redirect(long);
+  });
+  
 });
 
 app.listen(3000, function () {
