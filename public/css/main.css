@@ -31,6 +31,27 @@ body {
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.32), 0 3px 12px 0 rgba(0, 0, 0, 0.24);
   border-radius: 6px;
   color: white;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+code {
+  background-color: #444;
+  color: #EEE;
+  display: block;
+  margin-left: 20px;
+  margin-right: 60px;
+
+}
+
+h1 {
+  color: #EEE;
+}
+
+h2 {
+  margin-left: 20px;
+  color: #EEE;
 }
 
 .header {
