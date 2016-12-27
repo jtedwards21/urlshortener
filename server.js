@@ -1,9 +1,13 @@
 var express = require('express')
 var app = express()
+app.use('/public', express.static(process.cwd() + '/public'));
 var databaseUrl = "mongodb://localhost:27017/urldb";
 var mongojs = require("mongojs");
 var db = mongojs("urldb", ["urls"]);
 
+app.get('/', function(req,res){
+  res.sendFile(process.cwd() + '/public/index.html');
+});
 
 app.get('/new/http://www.:long.com', function (req, res) {
   //Get the last short url from the db
