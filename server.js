@@ -3,7 +3,7 @@ var app = express()
 app.use('/public', express.static(process.cwd() + '/public'));
 var databaseUrl = "mongodb://localhost:27017/urldb";
 var mongojs = require("mongojs");
-var db = mongojs("urldb", ["urls"]);
+var db = mongojs(process.env.MONGOLAB_URI, ["urls"]);
 
 app.get('/', function(req,res){
   res.sendFile(process.cwd() + '/public/index.html');
